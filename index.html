@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Popup about:blank demo</title>
+</head>
+<body>
+  <h1>Ethan's about:blank popup test website</h1>
+
+  <button id="openPopupBtn">Click here to open an about:blank popup window</button>
+
+  <script>
+    document.getElementById("openPopupBtn").addEventListener("click", function () {
+      // open the popup window
+      const popup = window.open(
+        "about:blank",
+        "blankPopup",
+        "width=400,height=300"
+      );
+
+      // If the popup was blocked
+      if (!popup) {
+        alert("Popup blocked");
+        return;
+      }
+
+      // Write simple HTML into the about:blank window
+      popup.document.write(`
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <title>about:blank popup</title>
+        </head>
+        <body>
+          <h2>This is the about:blank popup</h2>
+          <button id="closeBtn">Close Popup</button>
+
+          <script>
+            document.getElementById("closeBtn").addEventListener("click", function () {
+              window.close();
+            });
+          <\/script>
+        </body>
+        </html>
+      `);
+
+      popup.document.close();
+    });
+  </script>
+</body>
+</html>
