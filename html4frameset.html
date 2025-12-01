@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN"
+  "http://www.w3.org/TR/html4/frameset.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Frameset Popup Test</title>
+</head>
+
+<body>
+  <h1>Test Softeon-style about:blank Popup (HTML4 Frameset)</h1>
+
+  <button id="openPopupBtn">Open Frameset Popup</button>
+
+  <script>
+    document.getElementById("openPopupBtn").addEventListener("click", () => {
+      const popup = window.open("about:blank", "_blank", "width=600,height=400");
+
+      if (!popup) {
+        alert("Popup blocked!");
+        return;
+      }
+
+      popup.document.open();
+      popup.document.write(`
+        <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN"
+          "http://www.w3.org/TR/html4/frameset.dtd">
+        <html>
+        <head><title>Frameset Popup</title></head>
+
+        <frameset rows="100%">
+          <frame id="legacyFrame" name="legacyFrame">
+        </frameset>
+
+        </html>
+      `);
+      popup.document.close();
+
+      setTimeout(() => {
+        try {
+          const frameWin = popup.frames["legacyFrame"];
+          const frameDoc = frameWin.document;
+
+          frameDoc.open();
+          frameDoc.write(`
+            <html>
+            <body style="background:#eef; font-family:Arial; padding:20px;">
+              <h2>This is inside an HTML4 &lt;frame&gt;</h2>
+              <p>Cycle should NOT be able to interact with this content.</p>
+              <button id="closeBtn">Close This Popup</button>
+
+              <script>
+                document.getElementById("closeBtn").onclick = function() {
+                  window.top.close();
+                };
+              <\/script>
+            </body>
+            </html>
+          `);
+          frameDoc.close();
+
+        } catch (e) {
+          console.error("Frame injection error:", e);
+        }
+      }, 100); 
+    });
+  </script>
+
+</body>
+</html>
