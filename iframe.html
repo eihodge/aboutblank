@@ -6,16 +6,11 @@
 </head>
 <body>
   <h1>about:blank popup with iframe</h1>
-  <p>
-    Click the button below to open an <code>about:blank</code> popup. The popup will contain
-    an <code>iframe</code>, and the Close button will be inside that iframe.
-  </p>
 
   <button id="openPopupBtn">Open about:blank popup</button>
 
   <script>
     document.getElementById("openPopupBtn").addEventListener("click", function () {
-      // Open a new about:blank window
       const popup = window.open(
         "about:blank",
         "blankPopupWithIframe",
@@ -23,31 +18,26 @@
       );
 
       if (!popup) {
-        alert("Popup blocked by your browser. Please allow popups for this site.");
+        alert("Popup blocked");
         return;
       }
 
-      // Write the OUTER popup document which contains an iframe
       popup.document.write(`
         <!DOCTYPE html>
         <html lang="en">
         <head>
           <meta charset="UTF-8">
-          <title>about:blank popup outer window</title>
+          <title>about:blank popup</title>
         </head>
         <body>
           <h2>about:blank popup outer window</h2>
-          <p>
-            The button you want to click is <strong>inside the iframe</strong> below,
-            not in this outer document.
-          </p>
+
           <iframe id="innerFrame" style="width:100%;height:70%;border:1px solid #ccc;"></iframe>
         </body>
         </html>
       `);
       popup.document.close();
 
-      // Now inject content into the IFRAME inside the popup
       const iframe = popup.document.getElementById("innerFrame");
       const frameDoc = iframe.contentWindow.document;
 
@@ -57,12 +47,11 @@
         <html lang="en">
         <head>
           <meta charset="UTF-8">
-          <title>Inner iframe content</title>
+          <title>Inner iframe</title>
         </head>
         <body>
-          <h3>Inner iframe content</h3>
-          <p>This button is inside the iframe inside about:blank.</p>
-          <button id="closeBtn">Close This Popup</button>
+          <h3>Inner iframe</h3>
+          <button id="closeBtn">Close popup</button>
 
           <script>
             document.getElementById('closeBtn').addEventListener('click', function () {
